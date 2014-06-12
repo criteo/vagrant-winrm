@@ -1,29 +1,78 @@
-# Vagrant::Winrm
+# <a name="title"></a> Vagrant-WinRM
 
-TODO: Write a gem description
+This is a [Vagrant][vagrant_dl] 1.6+ plugin that adds new command to extends WinRM communication features.
 
-## Installation
+**NOTE:** This plugin requires Vagrant 1.6+
 
-Add this line to your application's Gemfile:
+## <a name="features"></a> Features
 
-    gem 'vagrant-winrm'
+* Execute remote command
+* Upload files
+* Retrieve WinRM configuration
 
-And then execute:
+## <a name="installation"></a> Installation
 
-    $ bundle
+Install using standard Vagrant plugin installation methods:
 
-Or install it yourself as:
+    vagrant plugin install vagrant-winrm
 
-    $ gem install vagrant-winrm
+Please read the [Plugin usage][plugin_usage] page for more details.
 
-## Usage
+## <a name="usage"></a> Usage
 
-TODO: Write usage instructions here
+### <a name="usage-winrm"> winrm
 
-## Contributing
+This command allows you to execute arbitrary remote commands through WinRM.
 
-1. Fork it ( https://github.com/[my-github-username]/vagrant-winrm/fork )
+    vagrant winrm -c "pre-install.bat" -c "install.bat" -c "post-install.bat" Windows2008VM
+
+### <a name="usage-winrm-upload"> winrm-upload
+
+This command allows you to upload a file or a directory to your machine through WinRM.
+
+    vagrant winrm-upload "c:\mylocalFolder" "d:\" Windows2008VM
+
+## <a name="usage-winrm-config"> winrm-config
+
+This command prints the current WinRM configuration of your machine.
+
+```bash
+$ vagrant winrm-config --host "CustomHostname" Windows2008VM
+Host CustomHostname
+  HostName Windows2008VM.vagrant.up
+  Port 5985
+  User vagrant
+  Password vagrant
+```
+
+## <a name="development"></a> Development
+
+* Source hosted at [Gitlab][repo]
+* Report issues/questions/feature requests on [Gitlab Issues][issues]
+
+Pull requests are very welcome! Make sure your patches are well tested.
+Ideally create a topic branch for every separate change you make. For
+example:
+
+1. Fork the repo
 2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
+3. Commit your changes (`git commit -am 'Added some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+5. Create new Pull Request
+
+## <a name="authors"></a> Authors
+
+Created and maintained by [Baptiste Courtois][author] (<b.courtois@criteo.com>)
+
+## <a name="license"></a> License
+
+Apache 2.0 (see [LICENSE][license])
+
+
+[author]:                   https://github.com/Annih
+[issues]:                   https://gitlab.criteois.lan/ruby-gems/kitchen-vagrant_winrm/issues
+[license]:                  https://gitlab.criteois.lan/ruby-gems/kitchen-vagrant_winrm/blob/master/LICENSE
+[repo]:                     https://gitlab.criteois.lan/ruby-gems/kitchen-vagrant_winrm
+[plugin_usage]:             http://docs.vagrantup.com/v2/plugins/usage.html
+
+[vagrant_dl]:               http://downloads.vagrantup.com/

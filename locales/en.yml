@@ -1,0 +1,7 @@
+en:
+  vagrant_winrm:
+    errors:
+      config_error: |-
+        The current machine is not configured to communicate through WinRM.
+
+        Communicator: %{communicator}
