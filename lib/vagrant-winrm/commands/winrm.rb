@@ -9,7 +9,6 @@ module VagrantPlugins
       end
 
       def execute
-
         options = {}
 
         opts = OptionParser.new do |o|
@@ -30,30 +29,30 @@ module VagrantPlugins
 
         # Parse the options and return if we don't have any target.
         argv = parse_options(opts)
-        return if !argv
+        return unless argv
 
         if options[:version]
           require "#{VagrantPlugins::VagrantWinRM.source_root}/lib/version"
           safe_puts "Vagrant-winrm plugin #{VERSION}"
-          return
+          return 0
         end
 
-        # Execute the actual WinRM
+        return 0 unless options[:command]
+
+        # Execute the actual WinRM command
         with_target_vms(argv, single_target: true) do |vm|
 
           raise Errors::ConfigurationError, { :communicator => vm.config.vm.communicator } if vm.config.vm.communicator != :winrm
 
           exit_code = 0
-          if options[:command]
-            @logger.debug("Executing a batch of #{options[:command].length} on remote machine")
+          @logger.debug("Executing a batch of #{options[:command].length} on remote machine")
 
-            options[:command].each do |c|
-              @logger.debug("Executing command: #{c}")
-
-              exit_code |= vm.communicate.execute(c) do |type, data|
-                $stdout.print data if type == :stdout
-                $stderr.print data if type == :stderr
-              end
+          options[:command].each do |c|
+            @logger.debug("Executing command: #{c}")
+            c.gsub! '"', '\"' if c.include? '`' or c.include? '$(' # Powershell is so strange sometimes!
+            exit_code |= vm.communicate.execute(c) do |type, data|
+              $stdout.print data if type == :stdout
+              $stderr.print data if type == :stderr
             end
           end
           return exit_code

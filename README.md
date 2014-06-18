@@ -47,8 +47,8 @@ Host CustomHostname
 
 ## <a name="development"></a> Development
 
-* Source hosted at [Gitlab][repo]
-* Report issues/questions/feature requests on [Gitlab Issues][issues]
+* Source hosted at [Github][repo]
+* Report issues/questions/feature requests on [Github Issues][issues]
 
 Pull requests are very welcome! Make sure your patches are well tested.
 Ideally create a topic branch for every separate change you make. For
@@ -70,9 +70,9 @@ Apache 2.0 (see [LICENSE][license])
 
 
 [author]:                   https://github.com/Annih
-[issues]:                   https://gitlab.criteois.lan/ruby-gems/kitchen-vagrant_winrm/issues
-[license]:                  https://gitlab.criteois.lan/ruby-gems/kitchen-vagrant_winrm/blob/master/LICENSE
-[repo]:                     https://gitlab.criteois.lan/ruby-gems/kitchen-vagrant_winrm
+[issues]:                   https://github.com/criteo/vagrant-winrm/issues
+[license]:                  https://github.com/criteo/vagrant-winrm/blob/master/LICENSE
+[repo]:                     https://github.com/criteo/vagrant-winrm
 [plugin_usage]:             http://docs.vagrantup.com/v2/plugins/usage.html
 
 [vagrant_dl]:               http://downloads.vagrantup.com/

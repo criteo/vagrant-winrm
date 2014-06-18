@@ -1,4 +1,4 @@
-require 'pathname'
+require 'vagrant'
 
 module VagrantPlugins
   module VagrantWinRM
@@ -19,5 +19,4 @@ module VagrantPlugins
 end
 
 VagrantPlugins::VagrantWinRM.setup_i18n()
-
-require 'winrm/plugin'
+require 'vagrant-winrm/plugin'

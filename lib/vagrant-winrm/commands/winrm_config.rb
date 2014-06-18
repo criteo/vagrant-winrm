@@ -24,8 +24,9 @@ module VagrantPlugins
           end
         end
 
+        # Parse the options and return if we don't have any target.
         argv = parse_options(opts)
-        return if !argv
+        return unless argv
 
         with_target_vms(argv) do |machine|
 

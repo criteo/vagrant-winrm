@@ -13,8 +13,9 @@ module VagrantPlugins
           o.banner = 'Usage: vagrant winrm-upload <source> <destination> [name]'
         end
 
+        # Parse the options and return if we don't have any target.
         argv = parse_options opts
-        return if !argv
+        return unless argv
 
         if argv.empty? || argv.length > 3 || argv.length < 2
           raise Vagrant::Errors::CLIInvalidUsage,
@@ -27,6 +28,9 @@ module VagrantPlugins
 
         # Execute the actual WinRM
         with_target_vms(argv, single_target: true) do |vm|
+
+          raise Errors::ConfigurationError, { :communicator => vm.config.vm.communicator } if vm.config.vm.communicator != :winrm
+
           @logger.debug("Uploading #{source} to #{destination}")
           return vm.communicate.upload(source, destination)
         end
