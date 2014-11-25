@@ -10,7 +10,17 @@ describe VagrantPlugins::VagrantWinRM::WinRMConfig, :unit => true do
   let(:idx) { double('idx') }
   let(:winrm_config) { double('winrm_config', host: 'winrm_super_host', port: 32424, username: 'usern@me', password: 'p4ssw0rd') }
   let(:machine_config) { double('machine_config', winrm: winrm_config) }
-  let(:machine) { double('machine', config: machine_config, name: 'vagrant', provider: 'virtualbox', config: machine_config, ui: double('ui', opts: {})) }
+  let(:machine) {
+    double(
+      'machine',
+      config: machine_config,
+      name: 'vagrant',
+      provider: 'virtualbox',
+      config: machine_config,
+      ui: double('ui', opts: {}),
+      state: nil
+    )
+  }
   let(:env) { double('env', root_path: '', home_path: '', ui_class: '', machine_names: [machine.name], active_machines: [machine], machine_index: idx, default_provider: 'virtualbox') }
 
   before do
