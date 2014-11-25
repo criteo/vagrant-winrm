@@ -1,4 +1,12 @@
 language: ruby
 rvm:
-  - 2.0.0
+- 2.0.0
 script: rake spec
+deploy:
+  provider: rubygems
+  api_key:
+    secure: NeezYQb9K9qrLH6CwhkDQRmWQmjR01VcKwdhL4aic94K1jqoOqzktx/Rgw3hTkYwY12r8cRtRcDXoHsAnyjkMewbVgXQMmSN5BYYGyVfmLq8Dvw/IHeRFpE4l6KL0NGrZTw9K0yTBq/wa4TbGsMSILNgrzXr88gr8YcY9SVdjOU=
+  gem: vagrant-winrm
+  on:
+    tags: true
+    repo: criteo/vagrant-winrm
