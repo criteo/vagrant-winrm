@@ -1,7 +1,6 @@
 language: ruby
 rvm:
 - 2.0.0
-script: rake spec
 deploy:
   provider: rubygems
   api_key:
