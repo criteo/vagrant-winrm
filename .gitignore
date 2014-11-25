@@ -20,3 +20,6 @@ tmp
 *.o
 *.a
 mkmf.log
+
+# Bundler vendor gems to vendor/
+vendor/
