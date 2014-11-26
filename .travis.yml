@@ -4,7 +4,7 @@ rvm:
 deploy:
   provider: rubygems
   api_key:
-    secure: NeezYQb9K9qrLH6CwhkDQRmWQmjR01VcKwdhL4aic94K1jqoOqzktx/Rgw3hTkYwY12r8cRtRcDXoHsAnyjkMewbVgXQMmSN5BYYGyVfmLq8Dvw/IHeRFpE4l6KL0NGrZTw9K0yTBq/wa4TbGsMSILNgrzXr88gr8YcY9SVdjOU=
+    secure: gzvD+LH/hVa7RmW3C9Vf6v+asnClSj3I5EHpghwnG7oxJNCiKW1N3zTHPE64M+GhOus9kXlL2/oy358kSNyKAv2eEiqifMs5+hrFAqIU8jEPG+jvaVhBsVpmKedEZEc4ZDgn0Y71Et3+U8+VAEK7iAOQmgKSlVWF1qJxMV7lXSw=
   gem: vagrant-winrm
   on:
     tags: true
