@@ -8,4 +8,5 @@ deploy:
   gem: vagrant-winrm
   on:
     tags: true
+    all_branches: true
     repo: criteo/vagrant-winrm
