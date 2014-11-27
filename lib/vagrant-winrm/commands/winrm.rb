@@ -9,7 +9,7 @@ module VagrantPlugins
       end
 
       def execute
-        options = {}
+        options = { shell: :powershell }
 
         opts = OptionParser.new do |o|
           o.banner = 'Usage: vagrant winrm [options] [name]'
@@ -20,6 +20,10 @@ module VagrantPlugins
           o.on('-c', '--command COMMAND', 'Execute a WinRM command directly') do |c|
             options[:command] = Array.new if options[:command].nil?
             options[:command].push c
+          end
+
+          o.on('-s', '--shell SHELL', [:powershell, :cmd], 'Use the specified shell (powershell, cmd)') do |s|
+            options[:shell] = s
           end
 
           o.on('--plugin-version', 'Print the version of the plugin and exit') do
@@ -45,14 +49,11 @@ module VagrantPlugins
           raise Errors::ConfigurationError, { :communicator => vm.config.vm.communicator } if vm.config.vm.communicator != :winrm
 
           exit_code = 0
-          @logger.debug("Executing a batch of #{options[:command].length} on remote machine")
+          @logger.debug("Executing a batch of #{options[:command].length} on remote machine with #{options[:shell]}")
 
           options[:command].each do |c|
             @logger.debug("Executing command: #{c}")
-            exit_code |= vm.communicate.execute(c) do |type, data|
-              $stdout.print data if type == :stdout
-              $stderr.print data if type == :stderr
-            end
+            exit_code |= vm.communicate.execute(c, shell: options[:shell]) { |type, data| (type == :stderr ? $stderr : $stdout).print data }
           end
           return exit_code
         end
