@@ -15,9 +15,7 @@ module VagrantPlugins
 
         opts = OptionParser.new do |o|
           o.banner = 'Usage: vagrant winrm-config [options] [name]'
-          o.separator ''
           o.separator 'Options:'
-          o.separator ''
 
           o.on('--host NAME', 'Name the host for the config') do |h|
             options[:host] = h

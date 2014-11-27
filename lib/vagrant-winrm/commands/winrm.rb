@@ -13,9 +13,7 @@ module VagrantPlugins
 
         opts = OptionParser.new do |o|
           o.banner = 'Usage: vagrant winrm [options] [name]'
-          o.separator ''
           o.separator 'Options:'
-          o.separator ''
 
           o.on('-c', '--command COMMAND', 'Execute a WinRM command directly') do |c|
             options[:command] = Array.new if options[:command].nil?
