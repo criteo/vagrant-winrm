@@ -9,6 +9,10 @@ module VagrantPlugins
       class ConfigurationError < WinRMError
         error_key(:config_error)
       end
+
+      class TempFolderError < WinRMError
+        error_key(:tempfolder_error)
+      end
     end
   end
 end

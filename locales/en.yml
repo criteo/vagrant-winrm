@@ -5,3 +5,7 @@ en:
         The current machine is not configured to communicate through WinRM.
 
         Communicator: %{communicator}
+      tempfolder_error: |-
+        Unable to retrieve a temporary folder on the remote machine through WinRM.
+
+        Communicator: %{communicator}
