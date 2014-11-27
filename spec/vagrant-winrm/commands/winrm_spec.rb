@@ -48,7 +48,7 @@ describe VagrantPlugins::VagrantWinRM::WinRM, :unit => true do
       c = VagrantPlugins::VagrantWinRM::WinRM.new(['--plugin-version'], env)
       expect {
         expect(c.execute).to be_zero
-      }.to output("Vagrant-winrm plugin 0.0.1\n").to_stdout
+      }.to output("Vagrant-winrm plugin #{VagrantPlugins::VagrantWinRM::VERSION}\n").to_stdout
     end
 
     it 'displays help message with option --help' do
