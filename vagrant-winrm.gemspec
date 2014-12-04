@@ -14,13 +14,15 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = '>= 2.0.0'
 
+  s.add_dependency 'minitar', '~> 0.5'
+
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec_junit_formatter'
-  s.add_development_dependency 'rspec-core', '~> 3.0.0'
-  s.add_development_dependency 'rspec-expectations', '~> 3.0.0'
-  s.add_development_dependency 'rspec-mocks', '~> 3.0.0'
+  s.add_development_dependency 'rspec-core', '~> 3.0'
+  s.add_development_dependency 'rspec-expectations', '~> 3.0'
+  s.add_development_dependency 'rspec-mocks', '~> 3.0'
 
-  s.add_development_dependency 'bundler', '>= 1.0.0'
+  s.add_development_dependency 'bundler', '~> 1.0'
 
   s.files        = `git ls-files`.split("\n")
   s.executables  = `git ls-files`.split("\n").map { |f| f =~ /^bin\/(.*)/ ? $1 : nil }.compact

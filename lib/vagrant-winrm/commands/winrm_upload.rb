@@ -8,18 +8,76 @@ module VagrantPlugins
       end
 
       def execute
-        options = { temporary: false }
+        options = { temporary: false, compress: false }
+        source, destination, argv = parse_args options
 
+        return unless source || destination
+
+        # Execute the actual WinRM
+        with_target_vms(argv, single_target: true) do |vm|
+
+          raise Errors::ConfigurationError, { :communicator => vm.config.vm.communicator } if vm.config.vm.communicator != :winrm
+
+          tmp_dest = get_remote_temp_folder(vm) if options[:temporary] || options[:compress]
+
+          dest_file = options[:temporary] ? ::File.join(tmp_dest, destination) : destination
+          $stdout.print dest_file if options[:temporary]
+
+          @logger.debug("Uploading #{source} to #{destination}")
+          if options[:compress]
+            source_is_dir = ::File.directory? source
+            source = compress(source, source_is_dir)
+
+            dest_dir = source_is_dir || dest_file.end_with?('/') || dest_file.end_with?('\\') ? dest_file : ::File.dirname(dest_file)
+            remote_tgz_path = ::File.join(::File.dirname(tmp_dest), ::File.basename(source))
+            vm.communicate.upload(source, remote_tgz_path)
+            return vm.communicate.execute("New-Item '#{dest_dir}' -type directory -force; tar -xzf '#{remote_tgz_path}' -C '#{dest_dir}'; ")
+          else
+            return vm.communicate.upload(source, dest_file)
+          end
+        end
+      end
+
+
+      private
+
+      def compress(source, source_is_dir)
+        require 'zlib'
+        require 'tempfile'
+        require 'archive/tar/minitar'
+
+        cwd = Dir.pwd
+        begin
+          tmp = ::Tempfile.new(['script', '.tar.gz'])
+          tmp.binmode
+          tgz = Zlib::GzipWriter.new (tmp)
+
+          Dir.chdir source_is_dir ? source : ::File.dirname(source)
+          Archive::Tar::Minitar.pack(source_is_dir ? '.' : ::File.basename(source), tgz)
+
+          tmp.path # returns the temporary file path
+        ensure
+          tgz.close if tgz && !tgz.closed?
+          tmp.close if tmp && !tmp.closed?
+          Dir.chdir cwd
+        end
+      end
+
+      def parse_args(options)
         opts = OptionParser.new do |o|
           o.banner = <<-EOS
 Usage:
-\tvagrant winrm-upload <source> <destination> [name]
-\tvagrant winrm-upload -t <source> [name]
+\tvagrant winrm-upload [-c] <source> <destination> [name]
+\tvagrant winrm-upload [-c] -t <source> [name]
           EOS
           o.separator 'Options:'
 
           o.on('-t', '--temporary', 'Upload the source file to a temporary directory and return the path') do
             options[:temporary] = true
+          end
+
+          o.on('-c', '--compress', 'Use gzip compression to speed up the upload') do
+            options[:compress] = true
           end
         end
 
@@ -37,23 +95,8 @@ Usage:
         if argv.empty? || argv.length > max || argv.length < min
           raise Vagrant::Errors::CLIInvalidUsage, help: opts.help.chomp
         end
-        argv = argv.drop(min)
-
-        # Execute the actual WinRM
-        with_target_vms(argv, single_target: true) do |vm|
-
-          raise Errors::ConfigurationError, { :communicator => vm.config.vm.communicator } if vm.config.vm.communicator != :winrm
-
-          destination_file = options[:temporary] ? ::File.join(get_remote_temp_folder(vm), destination) : destination
-          $stdout.print destination_file if options[:temporary]
-
-          @logger.debug("Uploading #{source} to #{destination}")
-          return vm.communicate.upload(source, destination_file)
-        end
+        [source, destination, argv.drop(min)]
       end
-
-
-      private
 
       def get_remote_temp_folder(vm)
         dir = nil
