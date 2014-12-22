@@ -49,7 +49,6 @@ module VagrantPlugins
 
           options[:command].each do |c|
             @logger.debug("Executing command: #{c}")
-            c.gsub! '"', '\"' if c.include? '`' or c.include? '$(' # Powershell is so strange sometimes!
             exit_code |= vm.communicate.execute(c) do |type, data|
               $stdout.print data if type == :stdout
               $stderr.print data if type == :stderr
