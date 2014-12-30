@@ -11,7 +11,7 @@ describe VagrantPlugins::VagrantWinRM::WinRMUpload, :unit => true do
   let(:communicator) { double('communicator') }
   let(:config_vm) { double('config_vm', communicator: :winrm) }
   let(:machine_config) { double('machine_config', vm: config_vm) }
-  let(:machine) { double('machine', config: machine_config, name: 'vagrant', provider: 'virtualbox', config: machine_config, communicate: communicator, ui: double('ui', opts: {})) }
+  let(:machine) { double('machine', config: machine_config, name: 'vagrant', provider: 'virtualbox', config: machine_config, communicate: communicator, state:nil, ui: double('ui', opts: {})) }
   let(:env) { double('env', root_path: '', home_path: '', ui_class: '', machine_names: [machine.name], active_machines: [machine], machine_index: idx, default_provider: 'virtualbox') }
 
   before do
