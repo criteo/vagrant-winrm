@@ -6,7 +6,7 @@ This is a [Vagrant][vagrant_dl] 1.6+ plugin that adds new command to extends Win
 
 ## <a name="features"></a> Features
 
-* Execute remote command
+* Execute remote command (even with elevated credentials)
 * Upload files
 * Retrieve WinRM configuration
 
@@ -25,6 +25,9 @@ Please read the [Plugin usage][plugin_usage] page for more details.
 This command allows you to execute arbitrary remote commands through WinRM.
 
     vagrant winrm -c "pre-install.bat" -c "install.bat" -c "post-install.bat" Windows2008VM
+
+The following command run the given command with local elevated credentials
+    vagrant winrm -e -c "winrm get winrm/config Windows2008VM
 
 ### <a name="usage-winrm-upload"> winrm-upload
 

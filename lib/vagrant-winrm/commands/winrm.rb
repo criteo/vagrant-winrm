@@ -20,6 +20,10 @@ module VagrantPlugins
             options[:command].push c
           end
 
+          o.on('-e', '--elevated', 'Run all commands with elevated credentials') do |e|
+            options[:elevated] = true
+          end
+
           o.on('-s', '--shell SHELL', [:powershell, :cmd], 'Use the specified shell (powershell, cmd)') do |s|
             options[:shell] = s
           end
@@ -51,7 +55,7 @@ module VagrantPlugins
 
           options[:command].each do |c|
             @logger.debug("Executing command: #{c}")
-            exit_code |= vm.communicate.execute(c, shell: options[:shell]) { |type, data| (type == :stderr ? $stderr : $stdout).print data }
+            exit_code |= vm.communicate.execute(c, shell: options[:shell], elevated: options[:elevated]) { |type, data| (type == :stderr ? $stderr : $stdout).print data }
           end
           return exit_code
         end
