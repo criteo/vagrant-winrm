@@ -28,7 +28,7 @@ describe VagrantPlugins::VagrantWinRM::WinRM, :unit => true do
     end
 
     # Add our machine to the environment
-    allow(env).to receive(:machine).with(any_args, :virtualbox) do |name, provider|
+    allow(env).to receive(:machine) do |name, provider|
       machine if :vagrant == name
     end
   end
@@ -78,10 +78,10 @@ describe VagrantPlugins::VagrantWinRM::WinRM, :unit => true do
     it 'passes commands to communicator with no target' do
       c = VagrantPlugins::VagrantWinRM::WinRM.new(['-c', 'command1', '--command', 'command2', '-c', 'command3', '--command', 'command4'], env)
 
-      expect(communicator).to receive(:execute).ordered.with('command1', { shell: :powershell }).and_return 0
-      expect(communicator).to receive(:execute).ordered.with('command2', { shell: :powershell }).and_return 0
-      expect(communicator).to receive(:execute).ordered.with('command3', { shell: :powershell }).and_return 0
-      expect(communicator).to receive(:execute).ordered.with('command4', { shell: :powershell }).and_return 0
+      expect(communicator).to receive(:execute).ordered.with('command1', { shell: :powershell, elevated: nil }).and_return 0
+      expect(communicator).to receive(:execute).ordered.with('command2', { shell: :powershell, elevated: nil }).and_return 0
+      expect(communicator).to receive(:execute).ordered.with('command3', { shell: :powershell, elevated: nil }).and_return 0
+      expect(communicator).to receive(:execute).ordered.with('command4', { shell: :powershell, elevated: nil }).and_return 0
 
       expect {
         expect(c.execute).to be_zero
@@ -90,19 +90,28 @@ describe VagrantPlugins::VagrantWinRM::WinRM, :unit => true do
 
     it 'passes commands to communicator even with a specific target' do
       c = VagrantPlugins::VagrantWinRM::WinRM.new(['-c', 'command5', '--command', 'command6', '-c', 'command7', '--command', 'command8', 'vagrant'], env)
-      expect(communicator).to receive(:execute).ordered.with('command5', { shell: :powershell }).and_return 0
-      expect(communicator).to receive(:execute).ordered.with('command6', { shell: :powershell }).and_return 0
-      expect(communicator).to receive(:execute).ordered.with('command7', { shell: :powershell }).and_return 0
-      expect(communicator).to receive(:execute).ordered.with('command8', { shell: :powershell }).and_return 0
+      expect(communicator).to receive(:execute).ordered.with('command5', { shell: :powershell, elevated: nil }).and_return 0
+      expect(communicator).to receive(:execute).ordered.with('command6', { shell: :powershell, elevated: nil }).and_return 0
+      expect(communicator).to receive(:execute).ordered.with('command7', { shell: :powershell, elevated: nil }).and_return 0
+      expect(communicator).to receive(:execute).ordered.with('command8', { shell: :powershell, elevated: nil }).and_return 0
       expect {
         expect(c.execute).to be_zero
       }.not_to output.to_stdout
     end
 
+    it 'uses communicator elevated feature when option -e is present' do
+      c = VagrantPlugins::VagrantWinRM::WinRM.new(['-e', '-c', 'command'], env)
+
+      expect(communicator).to receive(:execute).with('command', { shell: :powershell, elevated: true }).and_yield(:stdout, 'output message').and_return 0
+      expect {
+        expect(c.execute).to be_zero
+      }.to output('output message').to_stdout
+    end
+
     it 'redirects winrm outputs to stdout' do
       c = VagrantPlugins::VagrantWinRM::WinRM.new(['-c', 'command'], env)
 
-      expect(communicator).to receive(:execute).with('command', { shell: :powershell }).and_yield(:stdout, 'output message').and_return 0
+      expect(communicator).to receive(:execute).with('command', { shell: :powershell, elevated: nil }).and_yield(:stdout, 'output message').and_return 0
       expect {
         expect(c.execute).to be_zero
       }.to output('output message').to_stdout
@@ -111,7 +120,7 @@ describe VagrantPlugins::VagrantWinRM::WinRM, :unit => true do
     it 'redirects winrm errors to stderr' do
       c = VagrantPlugins::VagrantWinRM::WinRM.new(['-c', 'command'], env)
 
-      expect(communicator).to receive(:execute).with('command', { shell: :powershell }).and_yield(:stderr, 'error message').and_return 0
+      expect(communicator).to receive(:execute).with('command', { shell: :powershell, elevated: nil }).and_yield(:stderr, 'error message').and_return 0
       expect {
         expect(c.execute).to be_zero
       }.to output('error message').to_stderr

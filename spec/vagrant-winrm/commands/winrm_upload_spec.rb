@@ -28,7 +28,7 @@ describe VagrantPlugins::VagrantWinRM::WinRMUpload, :unit => true do
     end
 
     # Add our machine to the environment
-    allow(env).to receive(:machine).with(any_args, :virtualbox) do |name, provider|
+    allow(env).to receive(:machine) do |name, provider|
       machine if :vagrant == name
     end
   end
