@@ -1,5 +1,6 @@
 require 'optparse'
 require 'vagrant/util/safe_puts'
+require 'vagrant/../../plugins/communicators/winrm/helper'
 
 module VagrantPlugins
   module VagrantWinRM
