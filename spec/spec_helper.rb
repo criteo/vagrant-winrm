@@ -11,6 +11,39 @@ require './lib/vagrant-winrm/commands/winrm.rb'
 require './lib/vagrant-winrm/commands/winrm_config.rb'
 require './lib/vagrant-winrm/commands/winrm_upload.rb'
 
+def mock_env
+  let(:idx) { double('idx') }
+  let(:communicator) { double('communicator') }
+  let(:winrm_config) {
+    double('winrm_config', host: 'winrm_super_host', port: 32424, username: 'usern@me', password: 'p4ssw0rd').tap do |config|
+      allow(config).to receive(:[]) { |key| config.send(key) }
+    end
+  }
+  let(:config_vm) { double('config_vm', communicator: :winrm) }
+  let(:machine_config) { double('machine_config', winrm: winrm_config, vm: config_vm) }
+
+  let(:provider) {
+    double('provider', to_sym: :virtualbox).tap do |provider|
+      allow(provider).to receive(:capability?).and_return(true)
+      allow(provider).to receive(:capability).with(:winrm_info).and_return(winrm_config)
+    end
+  }
+
+  let(:machine) {
+    double(
+      'machine',
+      config: machine_config,
+      name: 'vagrant',
+      provider: provider,
+      config: machine_config,
+      communicate: communicator,
+      ui: double('ui', opts: {}),
+      state: nil
+    )
+  }
+  let(:env) { double('env', root_path: '', home_path: '', ui_class: '', machine_names: [machine.name], active_machines: [machine], machine_index: idx, default_provider: provider) }
+end
+
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
