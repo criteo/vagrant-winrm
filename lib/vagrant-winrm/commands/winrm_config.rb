@@ -1,5 +1,6 @@
 require 'optparse'
 require 'vagrant/util/safe_puts'
+require 'vagrant/../../plugins/communicators/winrm/helper'
 
 module VagrantPlugins
   module VagrantWinRM
@@ -30,8 +31,8 @@ module VagrantPlugins
 
           variables = {
             host_key: options[:host] || machine.name || 'vagrant',
-            winrm_host: machine.config.winrm.host,
-            winrm_port: machine.config.winrm.port,
+            winrm_host: VagrantPlugins::CommunicatorWinRM::Helper.winrm_info(machine)[:host],
+            winrm_port: VagrantPlugins::CommunicatorWinRM::Helper.winrm_info(machine)[:port],
             winrm_user: machine.config.winrm.username,
             winrm_password: machine.config.winrm.password
           }
