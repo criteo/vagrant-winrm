@@ -59,6 +59,7 @@ describe VagrantPlugins::VagrantWinRM::WinRMConfig, :unit => true do
         expect($stdout.string).to match(/#{winrm_config.port}/)
         expect($stdout.string).to match(/#{winrm_config.username}/)
         expect($stdout.string).to match(/#{winrm_config.password}/)
+        expect($stdout.string).to match(/#{rdp_config.port}/)
       ensure
         $stdout = STDOUT
       end
@@ -74,6 +75,7 @@ describe VagrantPlugins::VagrantWinRM::WinRMConfig, :unit => true do
         expect($stdout.string).to match(/#{winrm_config.port}/)
         expect($stdout.string).to match(/#{winrm_config.username}/)
         expect($stdout.string).to match(/#{winrm_config.password}/)
+        expect($stdout.string).to match(/#{rdp_config.port}/)
       ensure
         $stdout = STDOUT
       end
@@ -89,6 +91,7 @@ describe VagrantPlugins::VagrantWinRM::WinRMConfig, :unit => true do
         expect($stdout.string).to match(/#{winrm_config.port}/)
         expect($stdout.string).to match(/#{winrm_config.username}/)
         expect($stdout.string).to match(/#{winrm_config.password}/)
+        expect($stdout.string).to match(/#{rdp_config.port}/)
       ensure
         $stdout = STDOUT
       end
