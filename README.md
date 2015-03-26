@@ -46,6 +46,7 @@ Host CustomHostname
   Port 5985
   User vagrant
   Password vagrant
+  RDPPort 3389
 ```
 
 ## <a name="development"></a> Development
