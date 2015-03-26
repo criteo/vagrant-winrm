@@ -1,6 +1,9 @@
 en:
   vagrant_winrm:
     errors:
+      winrm_not_ready: |-
+        Vagrant WinRM communicator is not yet ready.
+
       config_error: |-
         The current machine is not configured to communicate through WinRM.
 
