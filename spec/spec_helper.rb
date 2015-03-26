@@ -19,8 +19,13 @@ def mock_env
       allow(config).to receive(:[]) { |key| config.send(key) }
     end
   }
+  let(:rdp_config) {
+    double('rdp_config', port: 4321, search_port: 98765).tap do |config|
+      allow(config).to receive(:[]) { |key| config.send(key) }
+    end
+  }
   let(:config_vm) { double('config_vm', communicator: :winrm) }
-  let(:machine_config) { double('machine_config', winrm: winrm_config, vm: config_vm) }
+  let(:machine_config) { double('machine_config', winrm: winrm_config, rdp: rdp_config, vm: config_vm) }
 
   let(:provider) {
     double('provider', to_sym: :virtualbox).tap do |provider|

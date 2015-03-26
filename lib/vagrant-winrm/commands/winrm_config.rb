@@ -34,7 +34,8 @@ module VagrantPlugins
             winrm_host: VagrantPlugins::CommunicatorWinRM::Helper.winrm_info(machine)[:host],
             winrm_port: VagrantPlugins::CommunicatorWinRM::Helper.winrm_info(machine)[:port],
             winrm_user: machine.config.winrm.username,
-            winrm_password: machine.config.winrm.password
+            winrm_password: machine.config.winrm.password,
+            rdp_port: machine.config.rdp.port
           }
 
           # Render the template and output directly to STDOUT
