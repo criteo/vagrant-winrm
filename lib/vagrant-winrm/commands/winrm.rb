@@ -55,7 +55,7 @@ module VagrantPlugins
 
           options[:command].each do |c|
             @logger.debug("Executing command: #{c}")
-            exit_code |= vm.communicate.execute(c, shell: options[:shell], elevated: options[:elevated]) { |type, data| (type == :stderr ? $stderr : $stdout).print data }
+            exit_code |= vm.communicate.execute(c, shell: options[:shell], elevated: options[:elevated], error_check: false) { |type, data| (type == :stderr ? $stderr : $stdout).print data }
           end
           return exit_code
         end
